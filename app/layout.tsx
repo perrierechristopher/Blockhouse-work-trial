@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: {
     template: 'Dashboard',
-    default: 'Name of the Application'
+    default: 'Dashboard'
   },
   description: 'This is a dashboard',
   metadataBase: new URL('localhost:3000')
