@@ -1,36 +1,24 @@
 "use client"
 import React, { useState } from 'react';
 import {
-  DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 
 import { MenuItem } from './types';
 import { getItem } from './functions';
-import { LineChartOutlined } from '@ant-design/icons';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const items: MenuItem[] = [
-  getItem('Different Chart', '1', <PieChartOutlined />, [
-    getItem('Candlestick', '1'),
-    getItem('Line', '2'),
-    getItem('Bar', '3'),
-    getItem('Pie', '4')
+  getItem('Charts', '/charts', <PieChartOutlined />, [
+    getItem('Line', '/dashboard/charts/?type=line'),
+    getItem('Bar', '/dashboard/charts/?type=bar'),
+    getItem('Pie', '/dashboard/charts/?type=pie'),
+    // getItem('Candlestick', '/dashboard/charts/?type=candlesticks'),
 
 
   ]),
-//   getItem('Option 2', '2', <DesktopOutlined />),
-//   getItem('User', 'sub1', <UserOutlined />, [
-//     getItem('Tom', '3'),
-//     getItem('Bill', '4'),
-//     getItem('Alex', '5'),
-//   ]),
-//   getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-//   getItem('Files', '9', <FileOutlined />),
 ];
 
 const DashboardLayout = ({children}: any) => {
@@ -39,18 +27,24 @@ const DashboardLayout = ({children}: any) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const router = useRouter();
+  const pathName = usePathname();
+  
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onSelect={({key})=>router.push(key)} />
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} />
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Chart</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          {pathName.split("/").map((segment, index) => 
+            <Breadcrumb.Item key={segment+index} className='capitalize'>{segment}</Breadcrumb.Item>
+          )}
+            
           </Breadcrumb>
           <div
             style={{
